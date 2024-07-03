@@ -1,0 +1,37 @@
+body {
+	background: #c025db;
+}
+
+main {
+	padding-top: 90px;
+}
+
+.ad {
+	height: 50vh !important;
+}
+
+.list-group-item {
+	background: #ede8ec;
+	border: none;
+}
+
+.carousel-item img, .slide {
+	height: 50vh !important;
+}
+
+.search {
+	width: 50vh !important;
+}
+
+.products {
+	background: #e7e1e8;
+}
+
+.product-item {
+	transition: all 0.5s;
+}
+
+.product-item:hover {
+	transform: scale(1.05);
+	z-index: 1;
+}
