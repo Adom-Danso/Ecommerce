@@ -6,6 +6,10 @@ main {
 	padding-top: 90px;
 }
 
+.signup-login {
+	min-width: 30%;
+}
+
 .ad {
 	height: 50vh !important;
 }
@@ -20,7 +24,7 @@ main {
 }
 
 .search {
-	width: 50vh !important;
+	width: 60% !important;
 }
 
 .products {
@@ -34,4 +38,43 @@ main {
 .product-item:hover {
 	transform: scale(1.05);
 	z-index: 1;
+}
+
+.whole-cart {
+	min-width: 422px;
+}
+
+.cart-item {
+	max-height: 200px;
+}
+
+.cart-img {
+	width: 80%;
+	min-width: 150px;
+}
+
+.quantity-btn {
+	border: none;
+}
+
+.quantity-icon {
+	width: 100%;
+	height: 100%;
+}
+
+.cart-summary {
+	width: 400px;
+}
+
+
+.bg-red {
+	background: red;
+}
+
+.red-heart {
+	color: red;
+}
+
+.invalid {
+	color: yellow;
 }

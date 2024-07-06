@@ -1,4 +1,6 @@
 import secrets
+
+
 class Config(object):
 	DEBUG = False
 	TESTING = False
@@ -10,3 +12,5 @@ class DevelopmentConfig(Config):
 	DEBUG = True
 	SESSION_PROTECTION = "strong"
 	SQLALCHEMY_DATABASE_URI = "sqlite:///database.db"
+	FLASK_ADMIN_SWATCH = 'slate'
+	

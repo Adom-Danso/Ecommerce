@@ -1,15 +1,31 @@
-from flask import Blueprint, render_template, flash, url_for, redirect
+from flask import Blueprint, render_template, flash, url_for, redirect, request
 from .forms import NewProduct
-from .models import Product, Cart, User
+from .models import Product, Cart, User, WishList
 from . import db
 from flask_login import current_user, login_required
+from sqlalchemy import and_
+import time
 
 views = Blueprint('views', __name__)
 
+@views.app_context_processor
+def base():
+    cart_no = 0
+    if current_user.is_authenticated:
+	    cart_items = db.session.execute(db.select(Cart).filter(Cart.user_id == current_user.id)).scalars()
+	    cart_no = len(list(cart_items))
+    return dict(cart_no=cart_no)
+
 @views.route('/')
 def home():
-	products = db.session.execute(db.select(Product)).scalars()
-	return render_template('views/home.html', products=products)
+    products = list(db.session.execute(db.select(Product)).scalars())
+    liked_products = []
+    if current_user.is_authenticated:
+    	liked_items = db.session.execute(db.select(WishList).filter(WishList.user_id == current_user.id)).scalars()
+    	liked_products = [item.product_id for item in liked_items]
+
+    return render_template('views/home.html', products=products, liked_products=liked_products)
+
 
 @views.route('/food-and-grocery')
 def food_and_Grocery():
@@ -51,30 +67,60 @@ def toys():
 	products = db.session.execute(db.select(Product).where(Product.toys == '1')).scalars()
 	return render_template('views/home.html', products=products)
 
-@views.route('/add-product', methods=['GET', 'POST'])
-@login_required
-def add_product():
-	form = NewProduct()
-	if form.validate_on_submit():
-		new_product = Product(name=form.name.data, seller=form.seller.data, price=form.price.data, food_and_Grocery=bool(form.food_and_Grocery.data), mobilePhones_and_Tablets=bool(form.mobilePhones_and_Tablets.data), electronics=bool(form.electronics.data), sports=bool(form.sports.data), home_Furniture_and_Appliances=bool(form.home_Furniture_and_Appliances.data), fashion=bool(form.fashion.data), health_and_Beauty=bool(form.health_and_Beauty.data), toys=bool(form.toys.data))
-		print(bool(form.food_and_Grocery.data))
-		print(bool(form.mobilePhones_and_Tablets.data))
-		print(bool(form.electronics.data))
-		print(bool(form.sports.data))
-		print(bool(form.home_Furniture_and_Appliances.data))
-		print(bool(form.fashion.data))
-		print(bool(form.health_and_Beauty.data))
-		print(bool(form.toys.data))
-		db.session.add(new_product)
-		db.session.commit()
-		return redirect(url_for('views.home'))
-	return render_template('views/add_product.html', form=form)
-
-
 @views.route('/add-to-cart/<int:product_id>', methods=['POST'])
 @login_required
 def add_to_cart(product_id):
-	new_item = Cart(product=product_id, user_id=1)
-	db.session.add(new_item)
-	db.session.commit()
+	product = db.session.execute(db.select(Cart).filter(and_(Cart.user_id == current_user.id, Cart.product_id == product_id))).scalars().first()
+	if product is None:
+		new_item = Cart(product_id=product_id, user_id=current_user.id)
+		db.session.add(new_item)
+		db.session.commit()
 	return redirect(url_for('views.home'))
+
+@views.route('/cart', methods=['GET', 'POST'])
+@login_required
+def cart():
+    items = db.session.execute(db.select(Cart).filter_by(user_id=current_user.id)).scalars()
+    product_ids = [item.product_id for item in items]
+    cart_products = db.session.execute(db.select(Product).filter(Product.id.in_(product_ids))).scalars()
+    cart_products_list = list(cart_products)
+    no_of_items_in_cart = len(cart_products_list)
+    total_price = 0
+    if cart_products_list:
+	    for i in cart_products_list:
+	    	total_price += int(i.price)
+
+    return render_template('views/cart.html', products=cart_products_list, total_price=total_price)
+
+@views.route('/delete-cart-item/<int:product_id>', methods=['POST'])
+@login_required
+def remove_from_cart(product_id):
+	cart_item = db.session.execute(db.select(Cart).filter(and_(Cart.user_id == current_user.id, Cart.product_id == product_id))).scalars().first()
+	if cart_item is not None:
+		db.session.delete(cart_item)
+		db.session.commit()
+	return redirect(request.referrer)
+
+
+@views.route('/add-to-wishlist/<int:product_id>', methods=['POST'])
+@login_required
+def add_or_remove_from_wishlist(product_id):
+	item =  db.session.execute(db.select(WishList).filter(and_(WishList.user_id == current_user.id, WishList.product_id == product_id))).scalars().first()
+	if item is not None:
+		db.session.delete(item)
+		db.session.commit()
+	elif item is None:
+		new_item = WishList(product_id=product_id, user_id=current_user.id)
+		db.session.add(new_item)
+		db.session.commit()
+	return redirect(request.referrer)
+
+@views.route('/wish-list', methods=['GET'])
+@login_required
+def wishlist():
+    items = db.session.execute(db.select(WishList).filter_by(user_id=current_user.id)).scalars()
+    product_ids = [item.product_id for item in items]
+    wishlist_items = db.session.execute(db.select(Product).filter(Product.id.in_(product_ids))).scalars()
+    wishlist_items_list = list(wishlist_items)
+
+    return render_template('views/wishlist.html', products=wishlist_items_list)

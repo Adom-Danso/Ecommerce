@@ -1,0 +1,6 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+  <h1>Hello {{current_user.username}}</h1>
+  <p>This is the admin page</p>
+  <a href="{{ url_for('views.home') }}">Go to normal page</a>
+{% endblock %}
