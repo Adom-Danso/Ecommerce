@@ -1,7 +1,4 @@
 # Ecommerce
-Based on the Flask application code and functionalities you've described, here's a summary of what your website is about:
-
-### Summary
 
 Purpose:
    - The website serves as an e-commerce platform where users can browse products, add them to their wishlist, add them to their cart, place orders, and track their order history.
