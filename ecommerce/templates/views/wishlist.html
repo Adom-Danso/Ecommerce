@@ -20,7 +20,7 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">{{ product.name }}</h5>
-                    <p class="card-text">${{ product.price }}</p>
+                    <p class="card-text">Price: GH₵{{ product.price }}</p>
                     <p class="card-text">{{ product.seller }}</p>
                     <form action="{{ url_for('views.add_to_cart', product_id=product.id) }}" method="POST">
                         <button type="submit" class="btn btn-warning"><i class="bi bi-cart-plus"></i> Add to Cart</button>

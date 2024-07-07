@@ -2,6 +2,9 @@
 {% block title %}Cart{% endblock title %}
 {% block content %}
 <div class="container">
+    <div class="container-fluid text-center">
+        <span class="fs-1" style="color: white;">Cart</span>
+    </div>
     {% if products %}
     <div class="row py-4 gap-4">
         <div class="col-lg-7">
@@ -14,10 +17,11 @@
                     </div>
                     <div class="col-8 col-md-8 position-relative text-start">
                         <h2>{{ product.name }}</h2>
-                        <span class="fs-5">Price: ${{ product.price }}</span>
-                        <form method="POST" action="{{ url_for('views.remove_from_cart', product_id=product.id) }}" class="position-absolute end-0 bottom-0 p-3">
-                            <button class="btn btn-warning mt-3" type="submit">Remove</button>
-                        </form>
+                        <span class="fs-5">Price: GH₵{{ product.price }}</span>
+                        <div class="position-absolute end-0 bottom-0 p-3">
+                            <a href="{{ url_for('views.remove_from_cart', product_id=product.id) }}" class="btn btn-warning mt-3">Remove</a>
+                        </div>
+                        
                     </div>
                 </div>
                 {% endfor %}
@@ -25,25 +29,27 @@
         </div>
         <div class="col-lg-4">
             <div class="bg-white p-3 rounded-3">
-                <form action="{{ url_for('views.place_order') }}" method="POST">
-                    <h3 class="mb-4">Cart Summary</h3>
-                    <div class="m-2">
-                        {% for product in products %}
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="fw-bold">{{ product.name }}:</span>
-                            <span class="text-secondary">${{ product.price }}</span>
-                        </div>
-                        {% endfor %}
+                <h3 class="mb-4">Cart Summary</h3>
+                <div class="m-2">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="fw-bold">Product</span>
+                        <span class="text-secondary">Price (GH₵)</span>
                     </div>
-                    <hr>
-                    <div class="d-flex justify-content-between mt-3">
-                        <span class="fs-5 fw-bold">Total Cost:</span>
-                        <span class="text-secondary">${{ total_price }}</span>
+                    {% for product in products %}
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="fw-medium">{{ product.name }}:</span>
+                        <span class="text-secondary">{{ product.price }}</span>
                     </div>
-                    <div class="mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg btn-block">Place Order</button>
-                    </div>
-                </form>    
+                    {% endfor %}
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between mt-3">
+                    <span class="fs-5 fw-bold">Total Cost:</span>
+                    <span class="text-secondary">GH₵{{ total_price }}</span>
+                </div>
+                <div class="mt-4">
+                    <a href="{{ url_for('views.checkout') }}" class="btn btn-primary btn-lg btn-block">Proceed to checkout</a>
+                </div>
             </div>
         </div>
     </div>

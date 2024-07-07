@@ -58,3 +58,11 @@ class EditProfile(FlaskForm):
 	city = StringField('City', validators=[Optional()])
 	country = SelectField('Country', choices=[('Ghana'), ('Nigeria'), ('Togo')], validators=[Optional()])
 	zipcode = StringField('Zip code', validators=[Optional()])
+
+class CheckoutForm(FlaskForm):
+	phone = TelField('Phone', validators=[DataRequired()])
+	address = StringField('Address', validators=[DataRequired()])
+	address2 = StringField('Address 2', validators=[Optional()])
+	city = StringField('City', validators=[DataRequired()])
+	country = SelectField('Country', choices=[('Ghana'), ('Nigeria'), ('Togo')], validators=[DataRequired()])
+	payment_method = SelectField('Payment method', choices=[('MTN-Momo'), ('V-Cash'), ('Credit card/Debit card/Visa card/Mastercard')], validators=[DataRequired()])

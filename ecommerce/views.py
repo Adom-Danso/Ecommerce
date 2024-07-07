@@ -1,12 +1,28 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request
-from .forms import EditProfile
+from .forms import EditProfile, CheckoutForm
 from .models import Product, Cart, User, WishList, Orders
 from . import db
 from flask_login import current_user, login_required
 from sqlalchemy import and_
+import secrets
+import random
 import json
 
 views = Blueprint('views', __name__)
+
+def place_order(cart_products, delivery_details, payment_method):
+	order_name = f'order{current_user.id}{secrets.token_hex(random.randint(10, 16))}'
+	cart = db.session.execute(db.select(Cart).filter(Cart.user_id == current_user.id))
+	order = {}
+	for item in cart_products:
+		order[item.name] = item.price
+	new_order = Orders(order_name=order_name, user_id=current_user.id, username=f'{current_user.first_name} {current_user.last_name}', order_items=json.dumps(order), payment_method=payment_method, delivery_details=delivery_details)
+	db.session.add(new_order)
+	for item in cart:
+		db.session.delete(item)
+	db.session.commit()
+	return redirect(url_for('views.orders'))
+
 
 @views.app_context_processor
 def base():
@@ -115,7 +131,7 @@ def add_to_cart(product_id):
 def cart():
     items = db.session.execute(db.select(Cart).filter_by(user_id=current_user.id)).scalars()
     product_ids = [item.product_id for item in items]
-    cart_products = db.session.execute(db.select(Product).filter(Product.id.in_(product_ids))).scalars()
+    cart_products = db.session.execute(db.select(Product).filter(Product.id.in_(product_ids)).order_by(Product.timestamp.desc())).scalars()
     cart_products_list = list(cart_products)
     no_of_items_in_cart = len(cart_products_list)
     total_price = 0
@@ -125,7 +141,7 @@ def cart():
 
     return render_template('views/cart.html', products=cart_products_list, total_price=total_price)
 
-@views.route('/delete-cart-item/<int:product_id>', methods=['POST'])
+@views.route('/delete-cart-item/<int:product_id>')
 @login_required
 def remove_from_cart(product_id):
 	cart_item = db.session.execute(db.select(Cart).filter(and_(Cart.user_id == current_user.id, Cart.product_id == product_id))).scalars().first()
@@ -153,30 +169,36 @@ def add_or_remove_from_wishlist(product_id):
 def wishlist():
     items = db.session.execute(db.select(WishList).filter_by(user_id=current_user.id)).scalars()
     product_ids = [item.product_id for item in items]
-    wishlist_items = db.session.execute(db.select(Product).filter(Product.id.in_(product_ids))).scalars()
-    wishlist_items_list = list(wishlist_items)
+    wishlist_items = list(db.session.execute(db.select(Product).filter(Product.id.in_(product_ids))).scalars())
 
-    return render_template('views/wishlist.html', products=wishlist_items_list)
+    return render_template('views/wishlist.html', products=wishlist_items)
 
-@views.route('/place-order', methods=['POST'])
+
+@views.route('/checkout', methods=['GET', 'POST'])
 @login_required
-def place_order():
-	cart = list(db.session.execute(db.select(Cart).filter(Cart.user_id == current_user.id)).scalars())
-	order = {}
-	for item in cart:
-		product = db.session.execute(db.select(Product).filter(Product.id == item.product_id)).scalar()
-		order[product.name] = product.price
-	new_order = Orders(user_id=current_user.id, order_items=json.dumps(order))
-	for item in cart:
-		db.session.delete(item)
-	db.session.add(new_order)
-	db.session.commit()
-	return redirect(request.referrer)
+def checkout():
+	form = CheckoutForm(phone=current_user.phone, address=current_user.address, address2=current_user.address2, city=current_user.city, country=current_user.country)
+	cart_items = list(db.session.execute(db.select(Cart).filter(Cart.user_id == current_user.id)).scalars())
+	product_ids = [item.product_id for item in cart_items]
+	cart_products = list(db.session.execute(db.select(Product).filter(Product.id.in_(product_ids)).order_by(Product.timestamp.desc())).scalars())
+	total_price = 0
+	if cart_products:
+		for i in cart_products:
+			total_price += int(i.price)
+	if form.validate_on_submit():
+		delivery_details = f'{form.address}, {form.city.data}, {form.country.data}'
+		if bool(form.address2.data):
+			delivery_details = form.address2.data +', '+ delivery_details
+		place_order(cart_products=cart_products, delivery_details=delivery_details, payment_method=form.payment_method.data)
+	if request.method == 'GET' and cart_products:
+		return render_template('views/checkout.html', form=form, summary=cart_products, total_price=total_price)
+	else:
+		return redirect(url_for('views.cart'))
 
 @views.route('/orders', methods=['GET', 'POST'])
 @login_required
 def orders():
-	orders = list(db.session.execute(db.select(Orders).filter(Orders.user_id == current_user.id)).scalars())
+	orders = list(db.session.execute(db.select(Orders).filter(Orders.user_id == current_user.id).order_by(Orders.timestamp.desc())).scalars())
 	summary = []
 	for order in orders:
 		order_data_dict = json.loads(order.order_items)

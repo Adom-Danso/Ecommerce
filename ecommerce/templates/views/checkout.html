@@ -1,0 +1,89 @@
+{% extends 'views/base.html' %}{% block title %}Checkout{% endblock title %}
+{% block content %}
+<div class="container-fluid">
+	<div class="bg-white p-4 rounded-3">
+	    <form action="{{ url_for('views.checkout') }}", method="POST" novalidate>
+	    	{{ form.hidden_tag() }}
+	    	<div class="mb-3">
+            	<button type="submit" class="btn btn-success">Place order</button>
+            	<a href="{{ url_for('views.cart') }}" class="btn btn-danger">Cancel</a>
+            </div>
+            <div class="accordion accordion-flush" id="accordionSummary">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#summary" aria-expanded="false" aria-controls="flush-collapseOne">
+                            Order summary
+                        </button>
+                    </h2>
+                    <div id="summary" class="accordion-collapse show" data-bs-parent="#accordionSummary">
+                        <div class="accordion-body">
+                            <ul>
+                            	{% for item in summary %}
+	                            	<li>{{ item.name }} - GH₵{{ item.price }}</li>
+                            	{% endfor %}
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>        
+	        <div class="accordion accordion-flush" id="accordionAddress">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#address" aria-expanded="false" aria-controls="flush-collapseOne">
+                            Address
+                        </button>
+                    </h2>
+                    <div id="address" class="accordion-collapse collapse" data-bs-parent="#accordionAddress">
+                        <div class="accordion-body">
+                        	<div class="row">
+	                            <div class="col-md-6 mb-3">
+					                <label for="phone" class="form-label">Phone</label>
+					                {{ form.phone(class="form-control") }}
+					            </div>
+					            <div class="col-md-6 mb-3">
+					                <label for="address" class="form-label">Address</label>
+					                {{ form.address(class="form-control") }}
+					            </div>
+					            <div class="col-md-6 mb-3">
+					                <label for="address2" class="form-label">Address 2<span>(optional)</span></label>
+					                {{ form.address2(class="form-control") }}
+					            </div>
+					            <div class="col-md-6 mb-3">
+					                <label for="city" class="form-label">City</label>
+					                {{ form.city(class="form-control") }}
+					            </div>
+					            <div class="col-md-6 mb-3">
+					                <label for="country" class="form-label">Country</label>
+					                {{ form.country(class="form-select") }}
+					            </div>
+					        </div>                     
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>        
+	        <div class="accordion accordion-flush" id="accordionPayment">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#payment" aria-expanded="false" aria-controls="flush-collapseOne">
+                            Payment method
+                        </button>
+                    </h2>
+                    <div id="payment" class="accordion-collapse collapse" data-bs-parent="#accordionPayment">
+                        <div class="accordion-body">
+                        	<div class="row">
+                        		<div class="col col-md-3 mb-3">
+					                <label for="payment_method" class="form-label">Payment method</label>
+					                {{ form.payment_method(class="form-select") }}
+					            </div> 
+					        </div>                        
+                        </div>
+                    </div>
+                </div>
+            </div>       
+	    </form>
+    </div>
+</div>
+{% endblock content %}

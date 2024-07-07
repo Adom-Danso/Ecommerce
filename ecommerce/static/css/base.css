@@ -1,5 +1,6 @@
 body {
 	background: #c025db;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 main {
@@ -140,4 +141,44 @@ main {
 .file-label .input-icon {
     position: absolute;
     color: white;
+}
+
+.order-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    border: none;
+}
+
+.accordion-button {
+    background-color: #007bff;
+    border: none;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #f8f9fa;
+}
+
+.accordion-button:focus,
+.accordion-button:not(.collapsed):hover {
+    box-shadow: none;
+    background-color: #f8f9fa;
+}
+
+.accordion-button.collapsed {
+    background-color: #f8f9fa;
+}
+
+.accordion-button.collapsed:hover {
+    background-color: #f8f9fa;
+}
+
+.progress {
+    height: 1.5rem;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    font-weight: bold;
 }
