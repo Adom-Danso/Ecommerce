@@ -10,14 +10,14 @@ class MyAdminIndexView(AdminIndexView):
 		return current_user.is_authenticated and current_user.role == 'admin'
 
 	def inaccessible_callback(self, name, **kwargs):
-		return abort(404)
+		return abort(403)
 
 class UserView(ModelView):
 	can_delete = False
 	can_create = False
 	column_editable_list = ['role']
 	column_exclude_list = ['password', 'timestamp']
-	form_excluded_columns = ['password', 'email', 'username', 'timestamp']
+	form_excluded_columns = ['password', 'email', 'username', 'timestamp', 'first_name', 'last_name', 'country', 'address', 'address2','city', 'zip_code', 'phone']
 	form_choices = {'role': [('normal', 'normal'), ('admin', 'admin')]}
 
 
@@ -25,7 +25,7 @@ class UserView(ModelView):
 		return current_user.is_authenticated and current_user.role == 'admin'
 
 	def inaccessible_callback(self, name, **kwargs):
-		return abort(404)
+		return abort(403)
 
 
 class ProductView(ModelView):
@@ -39,7 +39,7 @@ class ProductView(ModelView):
 		return current_user.is_authenticated and current_user.role == 'admin'
 
 	def inaccessible_callback(self, name, **kwargs):
-		return abort(404)
+		return abort(403)
 
 
 admin_panel.add_view(UserView(User, db.session))

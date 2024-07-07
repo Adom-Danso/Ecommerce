@@ -1,81 +1,74 @@
-<div class="p-3 border-bottom bg-dark fixed-top" data-bs-theme="dark">
-  <div class="row align-items-center">
-    <div class="col-3 col-xl-3">
-      <ul class="nav justify-content-center">
-        <li>
-          <a href="{{ url_for('views.home') }}" class="nav-link px-2 link-body-emphasis">
+<div class="navbar navbar-expand-md navbar-dark bg-dark fixed-top p-3">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Brand</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('views.home') }}">
             <i class="bi bi-house"></i> Home
           </a>
         </li>
-        <li>
-          <a href="#" class="nav-link px-2 link-body-emphasis">
+        <li class="nav-item">
+          <a class="nav-link" href="#">
             Contact Us
           </a>
         </li>
       </ul>
-    </div>
 
-    <div class="col-5 col-xl-5">
-      <form class="d-flex row justify-content-around" role="search" method="POST" action="#">
-        <div class="input-group me-2 search">
-          <input type="search" name="search" class="form-control rounded-start-3" placeholder="Search..." aria-label="Search" />
-          <button class="btn btn-outline-secondary rounded-end-3 justify-content-center" type="button" id="button-addon2">
-            <i class="bi bi-search"></i>
-          </button>
-        </div>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" name="search" placeholder="Search..." aria-label="Search">
+        <button class="btn btn-outline-secondary" type="submit">
+          <i class="bi bi-search"></i>
+        </button>
       </form>
-    </div>
 
-    <div class="col-4 col-xl-4 d-flex">
-      {% if current_user.is_authenticated %}
-        <div class="align-items-center">
-          <div class="align-items-center d-inline">
-            <a href="{{ url_for('views.cart') }}" class="link-body-emphasis text-decoration-none px-3">
-              <i class="bi bi-cart"></i> <span>Cart</span>
-              {% if cart_no > 0 %}
-              <span class="badge text-bg-secondary">{{cart_no}}</span>
-              {% endif %}
-              </a>
-            <a href="{{ url_for('views.wishlist') }}" class="link-body-emphasis text-decoration-none px-3">
-              <i class="bi bi-balloon-heart"></i> <span>WishList</span>
-            </a>
-          </div>
-          <div class="dropdown text-end d-inline">
-            <a href="#" class="link-body-emphasis text-decoration-none dropdown-toggle px-2" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-person"></i> Account
-            </a>
-            <ul class="dropdown-menu text-small">
-              <li>
-                <a class="dropdown-item" href="#">Profile</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">Orders</a>
-              </li>
-              <li><a class="dropdown-item" href="#">Settings</a></li>
-              <li><hr class="dropdown-divider"/></li>
-              {% if current_user.role == "admin" %}
-                <li>
-                  <a class="dropdown-item" href="{{url_for('admin.index')}}">Admin Page</a>
-                </li>
-              {% endif %}
-              <li class="">
-                <a class="dropdown-item d-flex justify-content-between align-items-center" href="{{ url_for('auth.logout') }}">
-                  <span>Sign out</span><i class="bi bi-box-arrow-right"></i>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      {% else %}
-      <div>
-        <a href="{{ url_for('auth.login') }}" class="link-body-emphasis text-decoration-none px-3">
-          Login
-        </a>
-        <a href="{{ url_for('auth.sign_up') }}" class="link-body-emphasis text-decoration-none px-3" >
-          Sign Up
-        </a>
-      </div>
-      {% endif %}
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        {% if current_user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('views.cart') }}">
+            <i class="bi bi-cart"></i> Cart
+            {% if cart_no > 0 %}
+            <span class="badge bg-secondary">{{ cart_no }}</span>
+            {% endif %}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('views.wishlist') }}">
+            <i class="bi bi-heart"></i> WishList
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person"></i> Account
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{{ url_for('views.profile') }}">Profile</a></li>
+            <li><a class="dropdown-item" href="#">Orders</a></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            {% if current_user.role == "admin" %}
+            <li><a class="dropdown-item" href="{{url_for('admin.index')}}">Admin Page</a></li>
+            {% endif %}
+            <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Sign out <i class="bi bi-box-arrow-right"></i></a></li>
+          </ul>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('auth.login') }}">
+            Login
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('auth.sign_up') }}">
+            Sign Up
+          </a>
+        </li>
+        {% endif %}
+      </ul>
     </div>
   </div>
 </div>

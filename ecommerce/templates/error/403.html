@@ -1,0 +1,15 @@
+{%extends 'views/base.html'%}{%block title%}Page Not Found{%endblock title%}
+{%block content%}
+<div class="error-body">
+	<div class="container">
+        <div class="error">
+            <h1>403</h1>
+            <h4>Forbidden</h4>
+            <p>Oops! You are not authorized to access this page.</p>
+            <a href="{{ url_for('views.home') }}" class="home-button">Go to Homepage</a>
+        </div>
+    </div>
+</div>
+{%endblock content%}
+
+

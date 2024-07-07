@@ -1,49 +1,58 @@
-{%extends 'views/base.html'%}{%block title%}Cart{%endblock title%}
-{%block content%}
-<div class="container-fluid ">
-{% if products %}
-	<div class="row p-4 gap-5">
-		<div class="text-center row">	
-			<span class="fs-1" style="color: white;">Shopping Cart</span>
-		</div>
-		<div class="col-7 rounded-3 bg-white p-3 pb-0 whole-cart row">
-			<h4>Cart items</h4>
-			{% for product in products %}
-				<div class="cart-item border-bottom mb-2 pb-2 px-3 row">
-					<div class="col col-md-5 col-lg-4">
-						<img src="{{url_for('static', filename='images/phone.jpg')}}" class="cart-img img-thumbnail">
-					</div>
-					<div class="col col-md-7 col-lg-8 position-relative">
-						<h2>{{product.name}}</h2>
-						<span class="fs-5">Price: ${{product.price}}</span>
-						<div class="position-absolute bottom-0 end-0 p-2">
-							<form method="POST" action="{{ url_for('views.remove_from_cart', product_id=product.id)}}">
-								<button class="btn btn-warning" type="submit">Remove</button>
-							</form>
-						</div>
-					</div>
-				</div>
-			{% endfor %}
-		</div>
-		<div class="col-3">
-			<div class="rounded-3 bg-white p-3 cart-summary">
-				<div><h3 class="border-bottom pb-2">Cart summary</h3></div>
-				<div class="m-2">
-					{% for product in products %}
-						<div class="d-flex justify-content-between"><span class="fw-medium">{{ product.name }}: </span><span class="fw-light">${{ product.price }}</span></div>
-					{% endfor %}
-				</div>
-				<div class="d-flex justify-content-between mb-2"><span class="fs-5 fw-medium">Total cost: </span><span class="fw-light">${{ total_price }}</span></div>
-				<div class="d-grid gap-2">
-				<button type="submit" class="btn btn-primary">Place order</button>
-				</div>
-			</div>
-		</div>
-	</div>
-{%else%}
-	<div class="text-start"><span class="fs-4" style="color: white;">You have nothing in cart.</span></div>
-{% endif %}	
+{% extends 'views/base.html' %}
+{% block title %}Cart{% endblock title %}
+{% block content %}
+<div class="container">
+    {% if products %}
+    <div class="row py-4 gap-4">
+        <div class="col-lg-7">
+            <div class="bg-white p-3 rounded-3">
+                <h4 class="mb-4 text-start">Cart Items</h4>
+                {% for product in products %}
+                <div class="cart-item border-bottom mb-3 pb-3 row">
+                    <div class="col-3 col-md-4">
+                        <img src="{{ url_for('static', filename='images/phone.jpg') }}" class="cart-img img-thumbnail">
+                    </div>
+                    <div class="col-8 col-md-8 position-relative text-start">
+                        <h2>{{ product.name }}</h2>
+                        <span class="fs-5">Price: ${{ product.price }}</span>
+                        <form method="POST" action="{{ url_for('views.remove_from_cart', product_id=product.id) }}" class="position-absolute end-0 bottom-0 p-3">
+                            <button class="btn btn-warning mt-3" type="submit">Remove</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="bg-white p-3 rounded-3">
+                <h3 class="mb-4">Cart Summary</h3>
+                <div class="m-2">
+                    {% for product in products %}
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="fw-bold">{{ product.name }}:</span>
+                        <span class="text-secondary">${{ product.price }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between mt-3">
+                    <span class="fs-5 fw-bold">Total Cost:</span>
+                    <span class="text-secondary">${{ total_price }}</span>
+                </div>
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Place Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col">
+            <div class="text-center py-5">
+                <span class="fs-4" style="color: white;">You have nothing in your cart.</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </div>
-{%endblock content%}
-
-
+{% endblock content %}

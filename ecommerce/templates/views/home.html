@@ -2,81 +2,88 @@
 {% block title %}Home{% endblock title %}
 {% block content %}
 <div class="container-fluid">
-    <div class="row mb-4 align-content-center justify-content-center ad">
-        <div class="list-group col-3 rounded-4 text-center">
-            <a href="{{ url_for('views.food_and_Grocery') }}" class="list-group-item list-group-item-action">Food & Grocery</a>
-            <a href="{{ url_for('views.mobile_phones_and_Tablets') }}" class="list-group-item list-group-item-action">Mobile Phones & Tablets</a>
-            <a href="{{ url_for('views.electronics') }}" class="list-group-item list-group-item-action">Electronics</a>
-            <a href="{{ url_for('views.sports') }}" class="list-group-item list-group-item-action">Sports</a>
-            <a href="{{ url_for('views.home_furniture_and_appliances') }}" class="list-group-item list-group-item-action">Home, Furniture & Appliances</a>
-            <a href="{{ url_for('views.fashion') }}" class="list-group-item list-group-item-action">Fashion</a>
-            <a href="{{ url_for('views.health_and_Beauty') }}" class="list-group-item list-group-item-action">Health & Beauty</a>
-            <a href="{{ url_for('views.toys') }}" class="list-group-item list-group-item-action">Toys</a>
-        </div>
-        <div id="carouselExampleDark" class="carousel carousel-dark slide col-6 rounded-3">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    <!-- Main Section with Carousel and Categories -->
+    <div class="row mb-4 align-items-center justify-content-center">
+        <!-- Categories List -->
+        <div class="col-12 col-md-3 mb-3 mb-md-0">
+            <div class="list-group rounded-4 text-center">
+                <a href="{{ url_for('views.food_and_Grocery') }}" class="list-group-item list-group-item-action">Food & Grocery</a>
+                <a href="{{ url_for('views.mobile_phones_and_Tablets') }}" class="list-group-item list-group-item-action">Mobile Phones & Tablets</a>
+                <a href="{{ url_for('views.electronics') }}" class="list-group-item list-group-item-action">Electronics</a>
+                <a href="{{ url_for('views.sports') }}" class="list-group-item list-group-item-action">Sports</a>
+                <a href="{{ url_for('views.home_furniture_and_appliances') }}" class="list-group-item list-group-item-action">Home, Furniture & Appliances</a>
+                <a href="{{ url_for('views.fashion') }}" class="list-group-item list-group-item-action">Fashion</a>
+                <a href="{{ url_for('views.health_and_Beauty') }}" class="list-group-item list-group-item-action">Health & Beauty</a>
+                <a href="{{ url_for('views.toys') }}" class="list-group-item list-group-item-action">Toys</a>
             </div>
-            <div class="carousel-inner rounded-4">
-                <div class="carousel-item active" data-bs-interval="10000">
-                    <img src="{{ url_for('static', filename='images/center.gif') }}" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item" data-bs-interval="2000">
-                    <img src="{{ url_for('static', filename='images/Content-creators.png') }}" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="{{ url_for('static', filename='images/KE_Food_TW_Live_0322_S.jpg') }}" class="d-block w-100" alt="...">
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
         </div>
-        <div class="col-3 rounded-4" style="background: pink;">2</div>
+        <!-- Carousel -->
+        <div class="col-12 col-md-6 mb-3 mb-md-0">
+            <div id="carouselExampleDark" class="carousel carousel-dark slide rounded-3">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner rounded-4">
+                    <div class="carousel-item active" data-bs-interval="10000">
+                        <img src="{{ url_for('static', filename='images/center.gif') }}" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item" data-bs-interval="2000">
+                        <img src="{{ url_for('static', filename='images/Content-creators.png') }}" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='images/KE_Food_TW_Live_0322_S.jpg') }}" class="d-block w-100" alt="...">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        <!-- Placeholder for Additional Content -->
+        <div class="col-12 col-md-3 rounded-4 bg-light">
+            <p class="text-center py-5">Placeholder content</p>
+        </div>
     </div>
 
-    {% if products %}
-    <div class="row align-content-center products g-0 border border-2">
-        {% for product in products %}
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 col-xxl-1 product-item">
-                <div class="card h-100">
-                    <div class="position-relative">
-                        <img src="{{ url_for('static', filename='images/customA.png') }}" class="card-img-top" alt="...">
-                        {% if current_user.is_authenticated %}
-                                <form class="d-grid" action="{{ url_for('views.add_or_remove_from_wishlist', product_id=product.id) }}" method="POST">
-                                    <button class="btn position-absolute bottom-0 end-0 m-2 px-2 pb-1 rounded-5 bg-white" type="submit">
-                                    	{% if product.id in liked_products %}
-                                    	<i class="bi bi-heart-fill red-heart"></i>
-                                    	{% else %}
-                                    	<i class="bi bi-heart"></i>
-                                    	{% endif %}
-                                    </button>
-                                </form>
-                        {% else %}
-                            <form class="d-grid" action="{{ url_for('views.add_or_remove_from_wishlist', product_id=product.id) }}" method="POST">
-                                <button class="btn position-absolute bottom-0 end-0 m-2 px-2 pb-1 rounded-5 bg-white" type="submit"><i class="bi bi-heart"></i></button>
+    <!-- Product Cards Section -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3">
+        {% if products %}
+            {% for product in products %}
+                <div class="col product-item">
+                    <div class="card h-100">
+                        <div class="position-relative">
+                            <img src="{{ url_for('static', filename='images/customA.png') }}" class="card-img-top" alt="...">
+                            <form class="position-absolute top-0 end-0 m-3" action="{{ url_for('views.add_or_remove_from_wishlist', product_id=product.id) }}" method="POST">
+                                <button class="btn btn-light rounded-circle" type="submit">
+                                    {% if product.id in liked_products %}
+                                        <i class="bi bi-heart-fill text-danger"></i>
+                                    {% else %}
+                                        <i class="bi bi-heart text-dark"></i>
+                                    {% endif %}
+                                </button>
                             </form>
-                        {% endif %}
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text">Price: ${{ product.price }}</p>
+                            <p class="card-text">{{ product.seller }}</p>
+                            <div class="mt-auto">
+                                <form action="{{ url_for('views.add_to_cart', product_id=product.id) }}" method="POST">
+                                    <button type="submit" class="btn btn-warning btn-block"><i class="bi bi-cart-plus"></i> Add to Cart</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{ product.name }}</h5>
-                        <span class="card-text">${{ product.price }}</span>
-                        <p class="card-text">{{ product.seller }}</p>
-                    </div>
-                    <form class="d-grid" action="{{ url_for('views.add_to_cart', product_id=product.id) }}" method="POST">
-                        <button type="submit" class="btn btn-warning m-2"><i class="bi bi-cart-plus"></i> Add to cart</button>
-                    </form>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        {% endif %}
     </div>
-    {% endif %}
 </div>
 {% endblock content %}

@@ -2,18 +2,23 @@ from . import db
 from flask_login import UserMixin
 from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
-import random
-import string
 
 class User(db.Model, UserMixin):
 	id = db.Column(db.Integer, primary_key=True)
+	first_name = db.Column(db.String(120), nullable=False)
+	last_name = db.Column(db.String(120), nullable=False)
 	email = db.Column(db.String(50), unique=True)
-	username = db.Column(db.String(50), unique=True, nullable=False)
 	password = db.Column(db.String(120), nullable=False)
 	timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 	cart = db.relationship('Cart', backref='user', lazy=True)
 	role = db.Column(db.String(50), nullable=False, default='normal')
-
+	phone = db.Column(db.String(120), nullable=True)
+	address = db.Column(db.String(120), nullable=True)
+	address2 = db.Column(db.String(120), nullable=True)
+	city = db.Column(db.String(120), nullable=True)
+	zip_code = db.Column(db.String(120), nullable=True)
+	country = db.Column(db.String(120), nullable=True)
+	
 	def set_password(self, password):
 		hash_password = generate_password_hash(password)
 		self.password = hash_password
@@ -21,12 +26,6 @@ class User(db.Model, UserMixin):
 	def verify_password(self, password):
 		return check_password_hash(self.password, password)
 
-	def set_username(self):
-		username = "user_"
-		for i in range(random.randint(10, 16)):
-			username += random.choice(string.ascii_letters)
-			username += random.choice(string.digits)
-		self.username = username
 				
 class Product(db.Model):
 	id = db.Column(db.Integer, primary_key=True)

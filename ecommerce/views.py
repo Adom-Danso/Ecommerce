@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request
-from .forms import NewProduct
+from .forms import EditProfile
 from .models import Product, Cart, User, WishList
 from . import db
 from flask_login import current_user, login_required
@@ -25,6 +25,7 @@ def home():
     	liked_products = [item.product_id for item in liked_items]
 
     return render_template('views/home.html', products=products, liked_products=liked_products)
+
 
 
 @views.route('/food-and-grocery')
@@ -66,6 +67,42 @@ def health_and_Beauty():
 def toys():
 	products = db.session.execute(db.select(Product).where(Product.toys == '1')).scalars()
 	return render_template('views/home.html', products=products)
+
+@views.route('/profile')
+@login_required
+def profile():
+    return render_template('views/profile.html')
+
+@views.route('/edit-profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+	form = EditProfile()
+	user = db.get_or_404(User, current_user.id)
+	if form.validate_on_submit():
+		if bool(form.email.data.strip()):
+			user.email = form.email.data
+		if bool(form.fname.data.strip()):
+			user.first_name = form.fname.data
+		if bool(form.lname.data.strip()):
+			user.last_name = form.lname.data
+		if bool(form.phone.data.strip()):
+			user.phone = form.phone.data
+		if bool(form.username.data.strip()):
+			user.username = form.username.data
+		if bool(form.address.data.strip()):
+			user.address = form.address.data
+		if bool(form.address2.data.strip()):
+			user.address2 = form.address2.data
+		if bool(form.city.data.strip()):
+			user.city = form.city.data
+		if bool(form.country.data.strip()):
+			user.country = form.country.data
+		if bool(form.zipcode.data.strip()):
+			user.zip_code = form.zipcode.data
+		db.session.commit()
+		return redirect(url_for('views.profile'))
+	return render_template('views/edit_profile.html', form=form)
+
 
 @views.route('/add-to-cart/<int:product_id>', methods=['POST'])
 @login_required

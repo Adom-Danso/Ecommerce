@@ -1,42 +1,78 @@
-{%extends 'views/base.html'%}{%block title%}Sign Up{%endblock title%}
-{%block content%}
-<div class="container-fluid d-flex justify-content-center">
-  <div class="signup-login border border-2 rounded-4 shadow pt-4">
-    <div class="mb-3 text-center">
-      <span class="fs-2 border-bottom border-2 border-white pb-1" style="color: white;">Sign Up</span>
+{% extends 'views/base.html' %}
+{% block title %}Sign Up{% endblock title %}
+{% block content %}
+<div class="container-fluid d-flex justify-content-center align-items-center" style="height: 100vh;">
+  <div class="signup-login border border-2 rounded-4 shadow p-4" style="max-width: 400px; width: 100%;">
+    <div class="text-center mb-2">
+      <h2 class="fw-bold" style="color: #343a40;">Sign Up</h2>
     </div>
-    <form method="POST" class="px-5 py-5 pt-0" novalidate>
-      {{form.hidden_tag()}}
+    <form method="POST" class="px-4 py-4" novalidate>
+      {{ form.hidden_tag() }}
+      <div class="row mb-3">
+          <div class="col-md-6">
+              <div class="form-floating">
+                  <input type="text" name="fname" class="form-control" id="fname" placeholder=" ">
+                  <label for="fname">First name</label>
+              </div>
+              {% if form.fname.errors %}
+                <div class="text-warning">
+                  {% for error in form.fname.errors %}
+                    <span>{{ error }}</span><br>
+                  {% endfor %}
+                </div>
+              {% endif %}
+          </div>
+          <div class="col-md-6">
+              <div class="form-floating">
+                  <input type="text" name="lname" class="form-control" id="lname" placeholder=" ">
+                  <label for="lname">Last name</label>
+              </div>
+              {% if form.lname.errors %}
+                <div class="text-warning">
+                  {% for error in form.lname.errors %}
+                    <span>{{ error }}</span><br>
+                  {% endfor %}
+                </div>
+              {% endif %}
+          </div>
+      </div>
       <div class="form-floating mb-3">
         <input type="email" class="form-control" id="email" placeholder="name@example.com" name="email">
         <label for="email">Email address</label>
         {% if form.email.errors %}
-          {% for error in form.email.errors %}
-              <span class="invalid">{{ error }}</span>
-          {% endfor %}
+          <div class="text-warning">
+            {% for error in form.email.errors %}
+              <span>{{ error }}</span><br>
+            {% endfor %}
+          </div>
         {% endif %}
       </div>
       <div class="form-floating mb-3">
-        <input type="password" class="form-control" id="password1" placeholder="Password" name="password1">
+        <input type="password" class="form-control" id="password1" placeholder="Password" name="password1" >
         <label for="password1">Password</label>
         {% if form.password1.errors %}
-          {% for error in form.password1.errors %}
-              <span class="invalid">{{ error }}</span>
-          {% endfor %}
+          <div class="text-warning">
+            {% for error in form.password1.errors %}
+              <span>{{ error }}</span><br>
+            {% endfor %}
+          </div>
         {% endif %}
       </div>
-      
       <div class="form-floating mb-3">
         <input type="password" class="form-control" id="password2" placeholder="Confirm Password" name="password2">
         <label for="password2">Confirm Password</label>
         {% if form.password2.errors %}
-          {% for error in form.password2.errors %}
-              <span class="invalid">{{ error }}</span>
-          {% endfor %}
+          <div class="text-warning">
+            {% for error in form.password2.errors %}
+              <span>{{ error }}</span><br>
+            {% endfor %}
+          </div>
         {% endif %}
       </div>
-      <div class="d-flex justify-content-center"><button type="submit" class="btn btn-primary align-center">Sign Up</button></div>
+      <div class="d-grid mb-3">
+        <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+      </div>
     </form>
   </div>
 </div>
-{%endblock content%}
+{% endblock content %}

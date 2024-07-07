@@ -1,37 +1,37 @@
-{%extends 'views/base.html'%}{%block title%}WishList{%endblock title%}
-{%block content%}
+{% extends 'views/base.html' %}
+{% block title %}Wishlist{% endblock title %}
+{% block content %}
 <div class="container-fluid">
-	<div class="container-fluid text-center mb-3">
-		<span class="fs-1" style="color: white;">Wish List</span>
-	</div>
-	{% if products %}
-		<div class="row align-content-center products g-0 border border-2">
-			{% for product in products %}
-				<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 col-xxl-1 product-item">
-				    <div class="card h-100">
-				    	<div class="position-relative">
-				    		<img src="{{url_for('static', filename='images/customA.png')}}" class="card-img-top" alt="...">
-				    		<form class="d-grid" action="{{ url_for('views.add_or_remove_from_wishlist', product_id=product.id) }}" method="POST">
-				    			<button class="btn position-absolute bottom-0 end-0 m-2 px-2 pb-1 rounded-5 bg-white" type="submit"><i class="bi bi-heart-fill red-heart"></i></button>
-				    		</form>
-				    		
-				    	</div>
-				      <div class="card-body">
-				        <h5 class="card-title">{{ product.name }}</h5>
-				        <span class="card-text">${{ product.price }}</span>
-				        <p class="card-text">{{ product.seller }}</p>
-				      </div>
-			      	<form class="d-grid" action="{{ url_for('views.add_to_cart', product_id=product.id) }}" method="POST">
-			      		<button type="submit" class="btn btn-warning m-2"><i class="bi bi-cart-plus"></i> Add to cart</button>
-			      	</form>
-				    </div>
-				</div>
-			{% endfor %}
-		</div>
-	{% else %}
-	<div class="text-start"><span class="fs-4" style="color: white;">You have nothing in wishlist.</span></div>
-{% endif %}	
+    <div class="container-fluid text-center mb-3">
+        <span class="fs-1" style="color: white;">Wishlist</span>
+    </div>
+    {% if products %}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+        {% for product in products %}
+        <div class="col product-item">
+            <div class="card h-100">
+                <div class="position-relative">
+                    <img src="{{ url_for('static', filename='images/customA.png') }}" class="card-img-top" alt="...">
+                    <form class="position-absolute top-0 end-0 m-3" action="{{ url_for('views.add_or_remove_from_wishlist', product_id=product.id) }}" method="POST">
+                        <button class="btn btn-light rounded-circle" type="submit">
+                            <i class="bi bi-heart-fill text-danger"></i>
+                        </button>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">${{ product.price }}</p>
+                    <p class="card-text">{{ product.seller }}</p>
+                    <form action="{{ url_for('views.add_to_cart', product_id=product.id) }}" method="POST">
+                        <button type="submit" class="btn btn-warning"><i class="bi bi-cart-plus"></i> Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-start"><span class="fs-4" style="color: white;">You have nothing in wishlist.</span></div>
+    {% endif %}
 </div>
-{%endblock content%}
-
-
+{% endblock content %}

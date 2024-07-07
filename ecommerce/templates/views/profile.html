@@ -1,0 +1,61 @@
+{% extends 'views/base.html' %}
+{% block title %}Login{% endblock title %}
+{% block content %}
+<div class="container">
+    <div class="profile-card mt-5">
+        <div class="">
+            <div class="container-fluid d-flex justify-content-around">
+                <div class="profile-image-container positon-relative">
+                    <img src="{{ url_for('static', filename='images/no-image.png') }}" class="img-fluid img-thumbnail profile-image" alt="Profile Picture">
+                    <form method="POST">
+                        <input type="file" class="file-input" id="fileInput" accept="image/*">
+                        <label for="fileInput" class="file-label">
+                            <i class="bi bi-pencil-fill"></i>
+                        </label>
+                    </form>
+                </div>
+            </div>            
+            <div class="d-block text-wrap">
+                <h3 class="mt-2">{{ current_user.first_name }}{% if current_user.last_name %} {{ current_user.last_name }} {% endif %} </h3>
+            </div>
+        </div>
+        <hr>
+        <div class="profile-details text-start">
+            <span class="fs-5 fw-medium">Contact Information</span>
+            <p><i class="bi bi-envelope mx-1"></i><span>Email: </span><span class="fw-light">{{ current_user.email }}</span></p>
+            <p>
+                <i class="bi bi-telephone mx-1"></i><span>Phone: </span>
+                <span class="fw-light">
+                    {% if current_user.phone %}
+                        {{ current_user.phone }}
+                    {% else %}
+                        None
+                    {% endif %}
+                </span>
+            </p>
+            <p>
+                <i class="bi bi-geo mx-1"></i><span>Address: </span>
+                <span class="fw-light">
+                    {% if current_user.address %}
+                        {{ current_user.address }},
+                    {% else %}
+                        Address not specified
+                    {% endif %}
+                    {% if current_user.city %}
+                        {{ current_user.city }},
+                    {% endif %}
+                    {% if current_user.country %}
+                        {{ current_user.country }}
+                    {% endif %}
+                </span>
+            </p>
+        </div>
+        <div>
+            <a href="{{ url_for('views.edit_profile') }}">
+                <button type="button" class="btn btn-primary">Edit profile</button> 
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
