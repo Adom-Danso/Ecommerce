@@ -11,6 +11,8 @@ class User(db.Model, UserMixin):
 	password = db.Column(db.String(120), nullable=False)
 	timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 	cart = db.relationship('Cart', backref='user', lazy=True)
+	wish_list = db.relationship('WishList', backref='user', lazy=True)
+	orders = db.relationship('Orders', backref='user', lazy=True)
 	role = db.Column(db.String(50), nullable=False, default='normal')
 	phone = db.Column(db.String(120), nullable=True)
 	address = db.Column(db.String(120), nullable=True)
@@ -18,6 +20,9 @@ class User(db.Model, UserMixin):
 	city = db.Column(db.String(120), nullable=True)
 	zip_code = db.Column(db.String(120), nullable=True)
 	country = db.Column(db.String(120), nullable=True)
+
+	def __repr__(self):
+		return '<User %r>' % self.first_name
 	
 	def set_password(self, password):
 		hash_password = generate_password_hash(password)
@@ -54,3 +59,9 @@ class WishList(db.Model):
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 	timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
+class Orders(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+	order_items = db.Column(db.String(200), nullable=False)
+	status = db.Column(db.String(50), nullable=False, default='Pending')
+	timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)

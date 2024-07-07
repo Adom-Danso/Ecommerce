@@ -29,7 +29,7 @@ def create_app():
 	app.register_blueprint(errors, url_prefix='/')
 	app.register_blueprint(auth, url_prefix='/auth')
 
-	from .models import Product, User, Cart, WishList
+	from .models import Product, User, Cart, WishList, Orders
 
 	with app.app_context():
 	    db.create_all()

@@ -1,0 +1,46 @@
+{%extends 'views/base.html'%}{%block title%}Orders{%endblock title%}
+{%block content%}
+<div class="container-fluid">
+    <div class="container-fluid text-center mb-3">
+        <span class="fs-1" style="color: white;">Orders</span>
+    </div>
+    {% if orders_summary %}
+    <div class="row">
+        <table class="table table-bordered table-responsive table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Order Items</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for order_summary in orders_summary %}
+                <tr>
+                    <td>{{ order_summary.order.id }}</td>
+                    <td>
+                        <ul>
+                            {% for product_name, price in order_summary.summary_data %}
+                            <li>{{ product_name }} - ${{ price }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>Total: $</td>
+                    <td>{{ order_summary.order.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col">
+            <div class="text-center py-5">
+                <span class="fs-4" style="color: white;">You have not ordered anything yet.</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}

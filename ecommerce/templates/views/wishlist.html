@@ -31,7 +31,13 @@
         {% endfor %}
     </div>
     {% else %}
-    <div class="text-start"><span class="fs-4" style="color: white;">You have nothing in wishlist.</span></div>
+    <div class="row">
+        <div class="col">
+            <div class="text-center py-5">
+                <span class="fs-4" style="color: white;">You have nothing in wishlist.</span>
+            </div>
+        </div>
+    </div>
     {% endif %}
 </div>
 {% endblock content %}

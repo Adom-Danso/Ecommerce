@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request
 from .forms import EditProfile
-from .models import Product, Cart, User, WishList
+from .models import Product, Cart, User, WishList, Orders
 from . import db
 from flask_login import current_user, login_required
 from sqlalchemy import and_
-import time
+import json
 
 views = Blueprint('views', __name__)
 
@@ -25,8 +25,6 @@ def home():
     	liked_products = [item.product_id for item in liked_items]
 
     return render_template('views/home.html', products=products, liked_products=liked_products)
-
-
 
 @views.route('/food-and-grocery')
 def food_and_Grocery():
@@ -87,8 +85,6 @@ def edit_profile():
 			user.last_name = form.lname.data
 		if bool(form.phone.data.strip()):
 			user.phone = form.phone.data
-		if bool(form.username.data.strip()):
-			user.username = form.username.data
 		if bool(form.address.data.strip()):
 			user.address = form.address.data
 		if bool(form.address2.data.strip()):
@@ -112,9 +108,9 @@ def add_to_cart(product_id):
 		new_item = Cart(product_id=product_id, user_id=current_user.id)
 		db.session.add(new_item)
 		db.session.commit()
-	return redirect(url_for('views.home'))
+	return redirect(request.referrer)
 
-@views.route('/cart', methods=['GET', 'POST'])
+@views.route('/cart', methods=['GET'])
 @login_required
 def cart():
     items = db.session.execute(db.select(Cart).filter_by(user_id=current_user.id)).scalars()
@@ -161,3 +157,32 @@ def wishlist():
     wishlist_items_list = list(wishlist_items)
 
     return render_template('views/wishlist.html', products=wishlist_items_list)
+
+@views.route('/place-order', methods=['POST'])
+@login_required
+def place_order():
+	cart = list(db.session.execute(db.select(Cart).filter(Cart.user_id == current_user.id)).scalars())
+	order = {}
+	for item in cart:
+		product = db.session.execute(db.select(Product).filter(Product.id == item.product_id)).scalar()
+		order[product.name] = product.price
+	new_order = Orders(user_id=current_user.id, order_items=json.dumps(order))
+	for item in cart:
+		db.session.delete(item)
+	db.session.add(new_order)
+	db.session.commit()
+	return redirect(request.referrer)
+
+@views.route('/orders', methods=['GET', 'POST'])
+@login_required
+def orders():
+	orders = list(db.session.execute(db.select(Orders).filter(Orders.user_id == current_user.id)).scalars())
+	summary = []
+	for order in orders:
+		order_data_dict = json.loads(order.order_items)
+		summary.append({
+			'order': order,
+			'summary_data': order_data_dict.items()
+			})
+
+	return render_template('views/orders.html', orders_summary=summary)
