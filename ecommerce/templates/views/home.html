@@ -67,8 +67,7 @@
                         </div>
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">{{ product.name }}</h5>
-                            <p class="card-text">Price: GH₵{{ product.price }}</p>
-                            <p class="card-text">{{ product.description }}</p>
+                            <span class="card-text fw-light mb-2">Price: GH₵{{ product.price }}</span>
                             <div class="mt-auto">
                                 <form action="{{ url_for('views.add_to_cart', product_id=product.id) }}" method="POST">
                                     <button type="submit" class="btn btn-warning btn-block"><i class="bi bi-cart-plus"></i> Add to Cart</button>

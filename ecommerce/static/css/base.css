@@ -16,6 +16,10 @@ main {
     z-index: 1;
 }
 
+.card-body {
+    background-color: #e3e1da;
+}
+
 .red-heart {
 	color: red;
 }
