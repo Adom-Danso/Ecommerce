@@ -15,6 +15,8 @@ def create_app():
 	config = dotenv_values('.env')
 	for key, value in config.items():
 		app.config[key] = value
+	app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.db"
+
 
 	from .admin import MyAdminIndexView
 
