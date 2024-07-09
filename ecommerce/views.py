@@ -268,7 +268,7 @@ def place_order():
 			'Authorization': f"Bearer {app.config['PAYSTACK_SECRET_KEY']}",
 			'Content-Type': 'application/json',
 		}
-		response = requests.get(f'https://api.paystack.co/transaction/verify/{payment_reference}', headers=headers)
+		response = requests.get(f'https://api.paystack.co/transaction/verify/{payment_reference}', headers=headers, timeout=200)
 		response_data = response.json()
 
 		if not response_data['status'] or response_data['data']['status'] != 'success':

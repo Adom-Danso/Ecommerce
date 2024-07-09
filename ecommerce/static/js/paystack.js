@@ -8,9 +8,8 @@ function generateRandomReference() {
 
 const randomReference = generateRandomReference();
 
-
 function payWithPaystack(e) {
-    e.preventDefault();  // Prevent the form from submitting normally
+    e.preventDefault();  // Prevent the form from submitting 
 
     let handler = PaystackPop.setup({
         key: 'pk_live_44145ccc7c2c714194e4c287f6f23ed89aabd7bd', // Replace with your public key
