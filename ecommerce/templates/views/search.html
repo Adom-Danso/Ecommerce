@@ -1,0 +1,40 @@
+{% extends "views/base.html" %}{% block title %}Home{% endblock title %} 
+{% block content %}
+<h2 class="p-2">Search results:</h2>
+<div class="container-fluid">
+    {% if products %}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+        {% for product in products %}
+        <div class="col product-item">
+            <div class="card h-100">
+                <div class="position-relative">
+                    <img src="{{ url_for('static', filename='images/'+ product.image_name) }}" class="card-img-top" alt="...">
+                    <form class="position-absolute top-0 end-0 m-3" action="{{ url_for('views.add_or_remove_from_wishlist', product_id=product.id) }}" method="POST">
+                        <button class="btn btn-light rounded-circle" type="submit">
+                            <i class="bi bi-heart-fill text-danger"></i>
+                        </button>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">Price: GH₵{{ product.price }}</p>
+                    <p class="card-text">{{ product.seller }}</p>
+                    <form action="{{ url_for('views.add_to_cart', product_id=product.id) }}" method="POST">
+                        <button type="submit" class="btn btn-warning"><i class="bi bi-cart-plus"></i> Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col">
+            <div class="text-center py-5">
+                <span class="fs-4" style="color: white;">Nothing to see here</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}

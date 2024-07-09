@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request, current_app as app, abort
-from .forms import EditProfile, CheckoutForm, NewProduct
+from .forms import EditProfile, CheckoutForm, NewProduct, SearchForm
 from .models import Product, Cart, User, WishList, Orders
 from . import db
 from flask_login import current_user, login_required
@@ -12,11 +12,11 @@ pay_ref = ''
 
 @views.app_context_processor
 def base():
-    cart_no = 0
-    if current_user.is_authenticated:
-	    cart_items = db.session.execute(db.select(Cart).filter(Cart.user_id == current_user.id)).scalars()
-	    cart_no = len(list(cart_items))
-    return dict(cart_no=cart_no)
+	cart_no = 0
+	if current_user.is_authenticated:
+		cart_items = db.session.execute(db.select(Cart).filter(Cart.user_id == current_user.id)).scalars()
+		cart_no = len(list(cart_items))
+	return dict(cart_no=cart_no)
 
 @views.route('/')
 def home():
@@ -303,3 +303,19 @@ def place_order():
 		db.session.commit()
 		return redirect(url_for('views.orders'))
 	return redirect(url_for('views.checkout'))
+
+
+@views.route('/search', methods=['GET', 'POST'])
+def search():
+	form = SearchForm()
+	print('not yet', flush=True)
+	if form.validate_on_submit():
+		print('Form validated', flush=True)
+		res = form.search.data
+		results = db.session.execute(db.select(Product).filter(Product.name.like(f'%{res}%')))
+		products = list(results.scalars())
+
+		print(products, flush=True)
+
+		return render_template('views/search.html', products=products)
+	return render_template('views/search.html')

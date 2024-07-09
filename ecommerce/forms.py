@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SubmitField, PasswordField, BooleanField, SelectField, TelField, SearchField, TextAreaField
+from wtforms import StringField, IntegerField, SubmitField, PasswordField, BooleanField, SelectField, TelField, SearchField, TextAreaField, DecimalField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError, Optional
 from flask_wtf.file import FileField, FileRequired
 import email_validator
@@ -38,7 +38,7 @@ class NewProduct(FlaskForm):
 	product_image = FileField("Product image", validators=[FileRequired('Product image is required')])
 	name = StringField('Product Name', validators=[DataRequired('Please enter product name')])
 	description = TextAreaField('Product description', validators=[DataRequired('please enter product description')])
-	price = IntegerField('Price', validators=[DataRequired('Please enter product price')])
+	price = DecimalField('Price', places=2, validators=[DataRequired('Please enter product price')])
 	food_and_Grocery = BooleanField('Food & Grocery', false_values=(False, 'false'))
 	mobilePhones_and_Tablets = BooleanField('Mobile Phones & Tablets', false_values=(False, 'false'))
 	electronics = BooleanField('Electronics', false_values=(False, 'false'))
@@ -67,3 +67,7 @@ class CheckoutForm(FlaskForm):
 	address2 = StringField('Address 2', validators=[Optional()])
 	city = StringField('City', validators=[DataRequired()])
 	country = SelectField('Country', choices=[('Ghana'), ('Nigeria'), ('Togo')], validators=[DataRequired()])
+
+class SearchForm(FlaskForm):
+	search = StringField('Search...')
+	submit = SubmitField('Search')

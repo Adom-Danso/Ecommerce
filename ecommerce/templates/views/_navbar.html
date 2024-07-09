@@ -18,9 +18,9 @@
           </a>
         </li>
       </ul>
-
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" name="search" placeholder="Search..." aria-label="Search">
+      
+      <form class="d-flex" method="POST" action="{{ url_for('views.search') }}">
+        <input class="form-control me-2" type="text" name="search" placeholder="Search..." aria-label="Search">
         <button class="btn btn-outline-secondary" type="submit">
           <i class="bi bi-search"></i>
         </button>
