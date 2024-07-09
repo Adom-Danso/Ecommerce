@@ -211,18 +211,22 @@ def wishlist():
 @views.route('/checkout')
 @login_required
 def checkout():
-	form = CheckoutForm(phone=current_user.phone, address=current_user.address, address2=current_user.address2, city=current_user.city, country=current_user.country)
-	cart_items = list(db.session.execute(db.select(Cart).filter(Cart.user_id == current_user.id)).scalars())
-	product_ids = [item.product_id for item in cart_items]
-	cart_products = list(db.session.execute(db.select(Product).filter(Product.id.in_(product_ids))).scalars())
-	total_price = 0
-	if cart_products:
-		for i in cart_products:
-			total_price += int(i.price)
-	if request.method == 'GET' and cart_products:
-		return render_template('views/checkout.html', form=form, summary=cart_products, total_price=total_price)
+	if bool(current_user.address) and bool(current_user.city) and bool(current_user.country) and bool(current_user.phone):
+		form = CheckoutForm(phone=current_user.phone, address=current_user.address, address2=current_user.address2, city=current_user.city, country=current_user.country)
+		cart_items = list(db.session.execute(db.select(Cart).filter(Cart.user_id == current_user.id)).scalars())
+		product_ids = [item.product_id for item in cart_items]
+		cart_products = list(db.session.execute(db.select(Product).filter(Product.id.in_(product_ids))).scalars())
+		total_price = 0
+		if cart_products:
+			for i in cart_products:
+				total_price += int(i.price)
+		if request.method == 'GET' and cart_products:
+			return render_template('views/checkout.html', form=form, summary=cart_products, total_price=total_price)
+		else:
+			return redirect(url_for('views.cart'))
 	else:
-		return redirect(url_for('views.cart'))
+		flash('Your account address details are not complete')
+		return redirect(url_for('views.edit_profile'))
 
 
 @views.route('/orders', methods=['GET', 'POST'])

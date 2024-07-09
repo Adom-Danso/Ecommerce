@@ -11,7 +11,7 @@
         <div class="col product-item">
             <div class="card h-100">
                 <div class="position-relative">
-                    <img src="{{ url_for('static', filename='images/customA.png') }}" class="card-img-top" alt="...">
+                    <img src="{{ url_for('static', filename='images/'+ product.image_name) }}" class="card-img-top" alt="...">
                     <form class="position-absolute top-0 end-0 m-3" action="{{ url_for('views.add_or_remove_from_wishlist', product_id=product.id) }}" method="POST">
                         <button class="btn btn-light rounded-circle" type="submit">
                             <i class="bi bi-heart-fill text-danger"></i>

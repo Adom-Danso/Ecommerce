@@ -13,7 +13,7 @@
                 {% for product in products %}
                 <div class="cart-item border-bottom mb-3 pb-3 row">
                     <div class="col-3 col-md-4">
-                        <img src="{{ url_for('static', filename='images/phone.jpg') }}" class="cart-img img-thumbnail">
+                        <img src="{{ url_for('static', filename='images/'+ product.image_name) }}" class="cart-img img-thumbnail">
                     </div>
                     <div class="col-8 col-md-8 position-relative text-start">
                         <h2>{{ product.name }}</h2>
