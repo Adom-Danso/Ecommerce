@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SubmitField, PasswordField, BooleanField, SelectField, TelField, SearchField
+from wtforms import StringField, IntegerField, SubmitField, PasswordField, BooleanField, SelectField, TelField, SearchField, TextAreaField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError, Optional
+from flask_wtf.file import FileField, FileRequired
 import email_validator
 from .models import User
 from . import db
@@ -34,9 +35,10 @@ class Login(FlaskForm):
 
 
 class NewProduct(FlaskForm):
-	name = StringField('Product Name', validators=[DataRequired()])
-	seller = StringField('Seller', validators=[DataRequired()])
-	price = IntegerField('Price', validators=[DataRequired()])
+	product_image = FileField("Product image", validators=[FileRequired('Product image is required')])
+	name = StringField('Product Name', validators=[DataRequired('Please enter product name')])
+	description = TextAreaField('Product description', validators=[DataRequired('please enter product description')])
+	price = IntegerField('Price', validators=[DataRequired('Please enter product price')])
 	food_and_Grocery = BooleanField('Food & Grocery', false_values=(False, 'false'))
 	mobilePhones_and_Tablets = BooleanField('Mobile Phones & Tablets', false_values=(False, 'false'))
 	electronics = BooleanField('Electronics', false_values=(False, 'false'))
@@ -47,12 +49,12 @@ class NewProduct(FlaskForm):
 	toys = BooleanField('Toys', false_values=(False, 'false'))
 	submit = SubmitField('Submit')
 
+
 class EditProfile(FlaskForm):
-	fname = StringField('First name', validators=[Optional()])
-	lname = StringField('Last name', validators=[Optional()])
-	phone = TelField('Phone', validators=[Optional()])
-	email = StringField("Email Address", validators=[Optional(), Email(message='Please enter a valid email')])
-	username = StringField('Username', validators=[Optional(), Length(min=3, max=15)])
+	fname = StringField('First name', validators=[DataRequired()])
+	lname = StringField('Last name', validators=[DataRequired()])
+	phone = TelField('Phone', validators=[DataRequired()])
+	email = StringField("Email Address", validators=[DataRequired(), Email(message='Please enter a valid email')])
 	address = StringField('Address', validators=[Optional()])
 	address2 = StringField('Address 2', validators=[Optional()])
 	city = StringField('City', validators=[Optional()])
@@ -65,4 +67,3 @@ class CheckoutForm(FlaskForm):
 	address2 = StringField('Address 2', validators=[Optional()])
 	city = StringField('City', validators=[DataRequired()])
 	country = SelectField('Country', choices=[('Ghana'), ('Nigeria'), ('Togo')], validators=[DataRequired()])
-	payment_method = SelectField('Payment method', choices=[('MTN-Momo'), ('V-Cash'), ('Credit card/Debit card/Visa card/Mastercard')], validators=[DataRequired()])

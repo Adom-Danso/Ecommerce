@@ -1,7 +1,8 @@
 from . import db
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
+import uuid
 
 class User(db.Model, UserMixin):
 	id = db.Column(db.Integer, primary_key=True)
@@ -35,7 +36,7 @@ class User(db.Model, UserMixin):
 class Product(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(100), nullable=False)
-	seller = db.Column(db.String(50))
+	description = db.Column(db.String(50), nullable=False)
 	price = db.Column(db.Integer, nullable=False)
 	food_and_Grocery = db.Column(db.Boolean, nullable=False)
 	mobilePhones_and_Tablets = db.Column(db.Boolean, nullable=False)
@@ -46,6 +47,7 @@ class Product(db.Model):
 	health_and_Beauty = db.Column(db.Boolean, nullable=False)
 	toys = db.Column(db.Boolean, nullable=False)
 	timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+	image_name = db.Column(db.String(), nullable=False)
 
 class Cart(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -62,10 +64,13 @@ class WishList(db.Model):
 class Orders(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-	username = db.Column(db.String(50))
-	order_name = db.Column(db.String(50), nullable=True)
+	username = db.Column(db.String(50), nullable=False)
+	order_name = db.Column(db.String(50), nullable=False)
 	order_items = db.Column(db.String(200), nullable=False)
-	payment_method = db.Column(db.String(50), nullable=True)
 	status = db.Column(db.String(50), nullable=False, default='pending')
-	delivery_details = db.Column(db.String(50), nullable=True)
+	delivery_details = db.Column(db.String(50), nullable=False)
+	total_price = db.Column(db.Integer, nullable=False)
 	timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+	def generate_order_name(self):
+		self.order_name = f"ORDER-{current_user.id}{uuid.uuid4().hex[:10].upper()}"

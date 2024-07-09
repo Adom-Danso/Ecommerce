@@ -19,31 +19,59 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="fname" class="form-label">First name</label>
-                <input type="text" name="fname" class="form-control" id="fname" placeholder="{% if current_user.first_name %} {{current_user.first_name}} {% else %} Not specified {% endif %}">
+                <input type="text" name="fname" class="form-control" id="fname" value="{{current_user.first_name}}">
+                {% if form.fname.errors %}
+                    <div class="text-warning">
+                      {% for error in form.fname.errors %}
+                        <span>{{ error }}</span><br>
+                      {% endfor %}
+                    </div>
+                {% endif %}
               </div>
               <div class="col-md-6 mb-3">
                 <label for="lname" class="form-label">Last name</label>
-                <input type="text" name="lname" class="form-control" id="lname" placeholder="{% if current_user.last_name %} {{current_user.last_name}} {% else %} Not specified {% endif %}">
+                <input type="text" name="lname" class="form-control" id="lname" value="{{current_user.last_name}}">
+                {% if form.lname.errors %}
+                    <div class="text-warning">
+                      {% for error in form.lname.errors %}
+                        <span>{{ error }}</span><br>
+                      {% endfor %}
+                    </div>
+                {% endif %}
               </div>
               <div class="col-12 mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" id="email" placeholder="{{current_user.email}}">
+                <input type="email" name="email" class="form-control" id="email" value="{{current_user.email}}">
+                {% if form.email.errors %}
+                    <div class="text-warning">
+                      {% for error in form.email.errors %}
+                        <span>{{ error }}</span><br>
+                      {% endfor %}
+                    </div>
+                {% endif %}
               </div>
               <div class="col-md-12 mb-3">
                 <label for="phone" class="form-label">Phone</label>
-                <input type="tel" name="phone" class="form-control" id="phone" placeholder="{% if current_user.phone %} {{current_user.phone}} {% else %} Not specified {% endif %}">
+                <input type="tel" name="phone" class="form-control" id="phone" value="{% if current_user.phone %} {{current_user.phone}} {% endif %}" placeholder="Not specified">
+                {% if form.phone.errors %}
+                    <div class="text-warning">
+                      {% for error in form.phone.errors %}
+                        <span>{{ error }}</span><br>
+                      {% endfor %}
+                    </div>
+                {% endif %}
               </div>
               <div class="col-12 mb-3">
                 <label for="address" class="form-label">Address</label>
-                <input type="text" name="address" class="form-control" id="address" placeholder="{% if current_user.address %} {{current_user.address}} {% else %} Not specified {% endif %}">
+                <input type="text" name="address" class="form-control" id="address" value="{% if current_user.address %} {{current_user.address}} {% endif %}" placeholder="Not specified">
               </div>
               <div class="col-12 mb-3">
                 <label for="address2" class="form-label">Address 2<span>(optional)</span></label>
-                <input type="text" name="address2" class="form-control" id="address2" placeholder="{% if current_user.address2 %} {{current_user.address2}} {% else %} Apartment, studio, or floor {% endif %}">
+                <input type="text" name="address2" class="form-control" id="address2" value="{% if current_user.address2 %} {{current_user.address2}} {% endif %}" placeholder="Apartment, studio, or floor">
               </div>
               <div class="col-md-6 mb-3">
                 <label for="city" class="form-label">City</label>
-                <input type="text" name="city" class="form-control" id="city" placeholder="{% if current_user.city %} {{current_user.city}} {% else %} Not specified {% endif %}">
+                <input type="text" name="city" class="form-control" id="city" value="{% if current_user.city %} {{current_user.city}} {% endif %}" placeholder="Not specified">
               </div>
               <div class="col-md-4 mb-3">
                 <label for="country" class="form-label">Country</label>

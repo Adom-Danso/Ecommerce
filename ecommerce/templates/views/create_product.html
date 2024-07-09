@@ -1,0 +1,91 @@
+{% extends 'views/base.html' %}
+{% block title %}Add New Product{% endblock title %}
+{% block content %}
+<div class="container profile-card">
+    <h2 class="text-center mb-4">Create New Product</h2>
+    <form method="POST" action="{{ url_for('views.add_product') }}" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="d-flex justify-content-around">
+            <div class="product-image-preview">
+                <img id="imagePreview" src="#" alt="Preview" class="img-fluid d-none">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="productImage" class="form-label">Product Image</label>
+            {{ form.product_image(class="form-control", id="productImage", accept="image/*", required=True) }}
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                {{ form.name.label(class="form-label") }}
+                {{ form.name(class="form-control", id="name") }}
+            </div>
+            <div class="col-md-6">
+                {{ form.price.label(class="form-label") }}
+                <div class="input-group">
+                    <span class="input-group-text">GH₵</span>
+                    {{ form.price(class="form-control", id="price", step="0.01") }}
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form.description.label(class="form-label") }}
+            {{ form.description(class="form-control", id="description", rows="3") }}
+        </div>
+
+        <h5>Select categories</h5>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                {{ form.food_and_Grocery(class="form-check-input", id="food_and_Grocery") }}
+                {{ form.food_and_Grocery.label(class="form-check-label", for="food_and_Grocery") }}
+            </div>
+            <div class="col-md-6">
+                {{ form.mobilePhones_and_Tablets(class="form-check-input", id="mobilePhones_and_Tablets") }}
+                {{ form.mobilePhones_and_Tablets.label(class="form-check-label", for="mobilePhones_and_Tablets") }}
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                {{ form.electronics(class="form-check-input", id="electronics") }}
+                {{ form.electronics.label(class="form-check-label", for="electronics") }}
+            </div>
+            <div class="col-md-6">
+                {{ form.sports(class="form-check-input", id="sports") }}
+                {{ form.sports.label(class="form-check-label", for="sports") }}
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                {{ form.home_Furniture_and_Appliances(class="form-check-input", id="home_Furniture_and_Appliances") }}
+                {{ form.home_Furniture_and_Appliances.label(class="form-check-label", for="home_Furniture_and_Appliances") }}
+            </div>
+            <div class="col-md-6">
+                {{ form.fashion(class="form-check-input", id="fashion") }}
+                {{ form.fashion.label(class="form-check-label", for="fashion") }}
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                {{ form.health_and_Beauty(class="form-check-input", id="health_and_Beauty") }}
+                {{ form.health_and_Beauty.label(class="form-check-label", for="health_and_Beauty") }}
+            </div>
+            <div class="col-md-6">
+                {{ form.toys(class="form-check-input", id="toys") }}
+                {{ form.toys.label(class="form-check-label", for="toys") }}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-success">Submit</button>
+            <a href="{{ url_for('views.home') }}" class="btn btn-danger ms-2">Cancel</a>
+        </div>
+        {% for field, errors in form.errors.items() %}
+            <div class="alert alert-danger">
+                {% for error in errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+    </form>
+</div>
+{% endblock content %}

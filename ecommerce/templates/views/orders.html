@@ -11,7 +11,7 @@
             <div class="col-12 col-md-6 col-lg-4 mb-4">
                 <div class="card order-card h-100">
                     <div class="card-body">
-                        <h5 class="card-title">{{ order_summary.order.name }}</h5>
+                        <h5 class="card-title">{{ order_summary.order.order_name }}</h5>
                         <div class="accordion accordion-flush" id="accordionFlush">
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
@@ -25,7 +25,8 @@
                                             {% for product, price in order_summary.summary_data %}
                                             <li>{{product}} - GH₵{{price}}</li>
                                             {% endfor %}
-                                        </ul>                            
+                                        </ul>
+                                        <span class="fw-medium">Total - </span><span class="fw-light">GH₵{{ order_summary.order.total_price }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -42,7 +43,7 @@
                             {% elif order_summary.order.status == 'delivered' %}
                                 <div class="progress-bar text-bg-success progress-bar-striped" style="width: 100%">Delivered</div>
                             {% elif order_summary.order.status == 'canceled' %}
-                                <div class="progress-bar text-bg-danger progress-bar-striped" style="width: 100%">Canceled</div>
+                                <div class="progress-bar text-bg-danger" style="width: 100%">Canceled</div>
                             {% endif %}
                         </div>
                     </div>
@@ -54,7 +55,7 @@
     <div class="row">
         <div class="col">
             <div class="text-center py-5">
-                <span class="fs-4">You have not ordered anything yet.</span>
+                <span class="fs-4" style="color: white;">You have not ordered anything yet.</span>
             </div>
         </div>
     </div>

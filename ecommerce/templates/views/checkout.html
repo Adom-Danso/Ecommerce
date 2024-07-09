@@ -2,11 +2,12 @@
 {% block content %}
 <div class="container-fluid">
 	<div class="bg-white p-4 rounded-3">
-	    <form action="{{ url_for('views.checkout') }}", method="POST" novalidate>
+	    <form action="{{ url_for('views.place_order') }}" method="POST" id="paymentForm">
 	    	{{ form.hidden_tag() }}
 	    	<div class="mb-3">
-            	<button type="submit" class="btn btn-success">Place order</button>
+            	<button type="submit" class="btn btn-success" id="pay-button">Place order</button>
             	<a href="{{ url_for('views.cart') }}" class="btn btn-danger">Cancel</a>
+                <span class="fw-light d-block fs-small" style="color: red;">Caution: Please fill out the required address form before proceeding to place order!</span>
             </div>
             <div class="accordion accordion-flush" id="accordionSummary">
                 <div class="accordion-item">
@@ -73,12 +74,22 @@
                     </h2>
                     <div id="payment" class="accordion-collapse collapse" data-bs-parent="#accordionPayment">
                         <div class="accordion-body">
-                        	<div class="row">
-                        		<div class="col col-md-3 mb-3">
-					                <label for="payment_method" class="form-label">Payment method</label>
-					                {{ form.payment_method(class="form-select") }}
-					            </div> 
-					        </div>                        
+                        	<div class="form-group">
+                                  <label for="email">Email Address</label>
+                                  <input type="email" id="email-address" name="email" value="{{ current_user.email }}" required />
+                              </div>
+                              <div class="form-group">
+                                  <label for="amount">Amount</label>
+                                  <input type="tel" id="amount" name="amount" required />
+                              </div>
+                              <div class="form-group">
+                                  <label for="first-name">First Name</label>
+                                  <input type="text" id="first-name" name="first_name" value="{{ current_user.first_name }}"/>
+                              </div>
+                              <div class="form-group">
+                                  <label for="last-name">Last Name</label>
+                                  <input type="text" id="last-name" name="last_name" value="{{ current_user.last_name }}"/>
+                              </div>                
                         </div>
                     </div>
                 </div>
@@ -86,4 +97,5 @@
 	    </form>
     </div>
 </div>
+<script src="{{ url_for('static', filename='js/paystack.js') }}"></script>
 {% endblock content %}

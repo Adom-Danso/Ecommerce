@@ -182,3 +182,24 @@ main {
 .progress-bar {
     font-weight: bold;
 }
+
+.form-group-item {
+  margin-bottom: 20px;
+}
+
+.form-group-item label {
+  font-weight: bold;
+}
+
+.product-image-preview {
+  max-width: 300px;
+  margin-bottom: 20px;
+}
+
+.custom-file-label::after {
+  content: 'Choose file';
+}
+
+.custom-file-input:lang(en)~.custom-file-label::after {
+  content: 'Browse';
+}

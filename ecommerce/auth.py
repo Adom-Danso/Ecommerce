@@ -12,7 +12,7 @@ def sign_up():
 	if current_user.is_authenticated:
 		return redirect(url_for('views.home'))
 	if form.validate_on_submit():
-		new_user = User(email=form.email.data, first_name=form.fname.data, lname=form.lname.data)
+		new_user = User(email=str(form.email.data).strip(), first_name=str(form.fname.data).strip(), last_name=str(form.lname.data).strip())
 		new_user.set_password(form.password1.data)
 		db.session.add(new_user)
 		db.session.commit()
