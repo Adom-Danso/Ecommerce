@@ -13,12 +13,13 @@ def create_app():
 	app = Flask(__name__)
 
 	load_dotenv()
-	app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-	app.config['PAYSTACK_PUBLIC_KEY'] = os.getenv('PAYSTACK_PUBLIC_KEY')
-	app.config['PAYSTACK_SECRET_KEY'] = os.getenv('PAYSTACK_SECRET_KEY')
+	database_url = os.environ.get('DATABASE_URL')
+	app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+	app.config['PAYSTACK_PUBLIC_KEY'] = os.environ.get('PAYSTACK_PUBLIC_KEY')
+	app.config['PAYSTACK_SECRET_KEY'] = os.environ.get('PAYSTACK_SECRET_KEY')
 	app.config['IMAGE_FOLDER'] = 'ecommerce/static/images'
-	app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
-	app.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024  
+	app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
+	app.config['MAX_CONTENT_LENGTH'] = os.environ.get('MAX_CONTENT_LENGTH')
 
 	app.config['SESSION_COOKIE_SECURE'] = True
 	app.config['SESSION_PROTECTION'] = "strong"
