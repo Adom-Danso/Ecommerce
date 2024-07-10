@@ -12,6 +12,10 @@ admin_panel = Admin()
 def create_app():
 	app = Flask(__name__)
 
+	config = dotenv_values('.env')
+	for key, value in config.items():
+		app.config[key] = value
+		
 	app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.db"
 
 
