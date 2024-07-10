@@ -1,4 +1,4 @@
-### E-commerce Site Summary
+### E-commerce Site Summary. Visit site: https://ecommerce-adom.onrender.com
 
 **Purpose**:
 The website serves as an e-commerce platform where users can browse products, add them to their wishlist, add them to their cart, place orders, and track their order history.
