@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_admin import Admin
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 import os
 
 db = SQLAlchemy()
@@ -12,11 +12,18 @@ admin_panel = Admin()
 def create_app():
 	app = Flask(__name__)
 
-	config = dotenv_values('.env')
-	for key, value in config.items():
-		app.config[key] = value
-		
-	app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.db"
+	load_dotenv()
+	app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+	app.config['PAYSTACK_PUBLIC_KEY'] = os.getenv('PAYSTACK_PUBLIC_KEY')
+	app.config['PAYSTACK_SECRET_KEY'] = os.getenv('PAYSTACK_SECRET_KEY')
+	app.config['IMAGE_FOLDER'] = 'ecommerce/static/images'
+	app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
+	app.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024  
+
+	app.config['SESSION_COOKIE_SECURE'] = True
+	app.config['SESSION_PROTECTION'] = "strong"
+	app.config['FLASK_ADMIN_SWATCH'] = 'slate'
+
 
 
 	from .admin import MyAdminIndexView
