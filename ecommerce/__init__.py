@@ -12,6 +12,7 @@ admin_panel = Admin()
 def create_app():
 	app = Flask(__name__)
 
+	#==============Configuration setup====================
 	load_dotenv()
 	app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 	app.config['PAYSTACK_PUBLIC_KEY'] = os.environ.get('PAYSTACK_PUBLIC_KEY')
@@ -23,10 +24,10 @@ def create_app():
 	app.config['SESSION_PROTECTION'] = "strong"
 	app.config['FLASK_ADMIN_SWATCH'] = 'slate'
 
-
-
+	#=============flask admin initalisation====================
 	from .admin import MyAdminIndexView
 
+	#============app initialisation================
 	db.init_app(app)
 	login_manager.init_app(app)
 	login_manager.login_view = "auth.login"
@@ -34,6 +35,7 @@ def create_app():
 	login_manager.session_protection = "strong"
 	admin_panel.init_app(app, index_view=MyAdminIndexView())
 
+	#=============blueprint registration===================
 	from .views import views
 	from .auth import auth
 	from .errors import errors
@@ -42,6 +44,7 @@ def create_app():
 	app.register_blueprint(errors, url_prefix='/')
 	app.register_blueprint(auth, url_prefix='/auth')
 
+	#===============creating database tables==================
 	from .models import Product, User, Cart, WishList, Orders
 
 	with app.app_context():

@@ -10,7 +10,8 @@ auth = Blueprint('auth', __name__)
 def sign_up():
 	form = SignUP()
 	if current_user.is_authenticated:
-		return redirect(url_for('views.home'))
+		return redirect(url_for('views.home'))  # redirect user to home page if already logged in
+
 	if form.validate_on_submit():
 		new_user = User(email=str(form.email.data).strip(), first_name=str(form.fname.data).strip(), last_name=str(form.lname.data).strip())
 		new_user.set_password(form.password1.data)
@@ -24,10 +25,13 @@ def sign_up():
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
 	form = Login()
-	if current_user.is_authenticated:
-		return redirect(url_for('views.home'))
+	if current_user.is_authenticated: 
+		return redirect(url_for('views.home')) # redirect user to home page if already logged in
+
 	if form.validate_on_submit():
+		
 		user = db.session.execute(db.select(User).filter_by(email=form.email.data)).scalar()
+
 		if user.verify_password(form.password.data):
 			login_user(user, remember=True)
 			flash('Successfully logged into your account')

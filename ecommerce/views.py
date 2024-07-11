@@ -8,7 +8,7 @@ from sqlalchemy import and_
 import secrets, random, json, requests, uuid, os
 
 views = Blueprint('views', __name__)
-pay_ref = ''
+pay_ref = '' # payment reference for verifying payments
 
 @views.app_context_processor
 def base():
@@ -73,9 +73,8 @@ def toys():
 def add_product():
 	if current_user.role == 'admin':
 		form = NewProduct()
-		print('before validation', flush=True)
 		if form.validate_on_submit():
-			print('validation success', flush=True)
+
 			new_product = Product(
 				name=form.name.data,
 				description=form.description.data,
@@ -97,14 +96,14 @@ def add_product():
 				uuid_filename = str(uuid.uuid1()) + '_' + secure_filename(product_image.filename)
 				new_product.image_name = uuid_filename
 
-			# Save the uploaded file to your server
+			# Save the uploaded file to server
 			product_image.save(os.path.join(app.config['IMAGE_FOLDER'], uuid_filename))
 
 			# Add new product to database
 			db.session.add(new_product)
 			db.session.commit()
 
-			# Redirect to home page or product list page
+			# Redirect to home page list page
 			return redirect(url_for('views.home'))
 		else:
 			for field, errors in form.errors.items():
@@ -211,6 +210,7 @@ def wishlist():
 @views.route('/checkout')
 @login_required
 def checkout():
+	# check to see if the user has specified his address details
 	if bool(current_user.address) and bool(current_user.city) and bool(current_user.country) and bool(current_user.phone):
 		form = CheckoutForm(phone=current_user.phone, address=current_user.address, address2=current_user.address2, city=current_user.city, country=current_user.country)
 		cart_items = list(db.session.execute(db.select(Cart).filter(Cart.user_id == current_user.id)).scalars())
@@ -224,6 +224,7 @@ def checkout():
 			return render_template('views/checkout.html', form=form, summary=cart_products, total_price=total_price)
 		else:
 			return redirect(url_for('views.cart'))
+	# if not redirect to the edit profile page
 	else:
 		flash('Your account address details are not complete')
 		return redirect(url_for('views.edit_profile'))
@@ -243,6 +244,7 @@ def orders():
 
 	return render_template('views/orders.html', orders_summary=summary)
 
+#======route to recieve reference code from paystack=========
 @views.route('/submit_ref_data', methods=['POST'])
 def submit_ref_data():
     data = request.json
@@ -260,6 +262,7 @@ def place_order():
 		global pay_ref
 		payment_reference = pay_ref
 		
+		#===============get payment reference
 		if not payment_reference:
 			flash('Payment was not successful. Please try again.', 'danger')
 			return redirect(url_for('views.checkout'))
@@ -268,13 +271,17 @@ def place_order():
 			'Authorization': f"Bearer {app.config['PAYSTACK_SECRET_KEY']}",
 			'Content-Type': 'application/json',
 		}
+
+		#============send a request to paystack api to verify payment============
 		response = requests.get(f'https://api.paystack.co/transaction/verify/{payment_reference}', headers=headers, timeout=200)
 		response_data = response.json()
 
+		#==============check if payment was a success or not==============
 		if not response_data['status'] or response_data['data']['status'] != 'success':
 			flash('Payment verification failed. Please try again.', 'danger')
 			return redirect(url_for('views.checkout'))
 
+		#==============if payment was a success, create an order===========
 		cart_items = list(db.session.execute(db.select(Cart).filter(Cart.user_id == current_user.id)).scalars())
 		product_ids = [item.product_id for item in cart_items]
 		cart_products = list(db.session.execute(db.select(Product).filter(Product.id.in_(product_ids))).scalars())
@@ -297,6 +304,7 @@ def place_order():
 
 		db.session.add(new_order)
 
+		#==========delete items from the cart and then commit to the database===========
 		for item in cart_items:
 			db.session.delete(item)
 

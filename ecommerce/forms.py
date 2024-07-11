@@ -6,6 +6,8 @@ import email_validator
 from .models import User
 from . import db
 
+
+#===============signup form============
 class SignUP(FlaskForm):
 	fname = StringField('First name', validators=[DataRequired('Please enter your first name')])
 	lname = StringField('Last name', validators=[DataRequired('Please enter your last name')])
@@ -14,26 +16,30 @@ class SignUP(FlaskForm):
 	password2 = PasswordField("Confirm Password" , validators=[DataRequired('Please confirm your password'), EqualTo('password1', "Passwords do not match")])
 	submit = SubmitField('Submit')
 
+	#============checking whether email already exists in the database==============
 	def validate_email(self, email):
 		if email.errors:
-			return
+			return #============return nothing if an error alreay occured=====
 		user = db.session.execute(db.select(User).filter_by(email=email.data)).scalar()
 		if user is not None:
 			raise ValidationError("Email address already in use")
 
+
+#===================Login form==============
 class Login(FlaskForm):
 	email = StringField("Email Address", validators=[DataRequired('Please enter an email'), Email(message='Please enter a valid email')])
 	password = PasswordField("Password" , validators=[DataRequired('Please enter your password'), Length(min=8, max=20, message="Password must be 8-20 characters long")])
 	submit = SubmitField('Submit')
 
+	#============checking whether email already exists in the database==============
 	def validate_email(self, email):
 		if email.errors:
-			return
+			return #============return nothing if an error alreay occured=====
 		user = db.session.execute(db.select(User).filter_by(email=email.data)).scalar()
 		if user is None:
 			raise ValidationError("User does not exist")
 
-
+#===================Form for adding new products=========
 class NewProduct(FlaskForm):
 	product_image = FileField("Product image", validators=[FileRequired('Product image is required')])
 	name = StringField('Product Name', validators=[DataRequired('Please enter product name')])

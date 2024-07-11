@@ -4,6 +4,8 @@ from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
 import uuid
 
+
+#=============User table==================
 class User(db.Model, UserMixin):
 	id = db.Column(db.Integer, primary_key=True)
 	first_name = db.Column(db.String(120), nullable=False)
@@ -24,15 +26,17 @@ class User(db.Model, UserMixin):
 
 	def __repr__(self):
 		return '<User %r>' % self.first_name
-	
+
+	#===========User method for converting the user password in to a hash password===========
 	def set_password(self, password):
 		hash_password = generate_password_hash(password)
 		self.password = hash_password
 
+	#===========Verifying password typed by user when logging in by comparing it to the already stored password===========
 	def verify_password(self, password):
 		return check_password_hash(self.password, password)
 
-				
+#=============Product table==================
 class Product(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(100), nullable=False)
@@ -49,18 +53,24 @@ class Product(db.Model):
 	timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 	image_name = db.Column(db.String(), nullable=False)
 
+
+#=============Cart table==================
 class Cart(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 	timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
+
+#=============Wishlist table==================
 class WishList(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 	timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
+
+#=============Orders table==================
 class Orders(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -72,5 +82,6 @@ class Orders(db.Model):
 	total_price = db.Column(db.Integer, nullable=False)
 	timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
+	#==============Method for generating unique order names==================
 	def generate_order_name(self):
 		self.order_name = f"ORDER-{current_user.id}{uuid.uuid4().hex[:10].upper()}"
