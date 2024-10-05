@@ -36,7 +36,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #c025db;
+    background-color: #91908d;
     font-family: Arial, sans-serif;
     color: #333;
 }
@@ -67,7 +67,7 @@ main {
     margin-top: 20px;
     padding: 10px 20px;
     font-size: 1rem;
-    color: #c025db;
+    color: #91908d;
     background-color: #f3f3f3;
     text-decoration: none;
     border-radius: 5px;
@@ -75,7 +75,7 @@ main {
 }
 
 .home-button:hover {
-    background-color: #a01ab8;
+    background-color: #91908d;
     color: #f3f3f3;
 }
 
