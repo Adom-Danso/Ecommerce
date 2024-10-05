@@ -51,7 +51,7 @@ class OrderView(ModelView):
 	column_exclude_list = ['timestamp']
 	form_excluded_columns = ['timestamp', 'user_id', 'order_items']
 	column_editable_list = ['status']
-	form_choices = {'status': [('pending', 'pending'), ('processing', 'processing'), ('shipped', 'shipped'), ('dilivered', 'dilivered'), ('canceled', 'canceled')]}
+	form_choices = {'status': [('pending', 'pending'), ('processing', 'processing'), ('shipped', 'shipped'), ('delivered', 'delivered'), ('cancelled', 'cancelled')]}
 
 	def is_accessible(self):
 		return current_user.is_authenticated and current_user.role == 'admin'
